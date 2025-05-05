@@ -90,3 +90,20 @@ gcloud scheduler jobs create pubsub stop-vms-job \
 3. Cria cliente da API Compute Engine.
 4. Itera sobre os pares de `instancia:zona` e chama o método `start` ou `stop`.
 5. Exibe no log o resultado de cada operação.
+
+## Diagrama de Conexões
+
+Segue um diagrama em ASCII mostrando como o Cloud Scheduler dispara uma mensagem no Pub/Sub, que por sua vez aciona uma Cloud Run Function via Push Subscription:
+
+```
+       +----------------+             +------------+             +-----------------------+
+       |                |   (1)       |            |   (2)       |                       |
+       | Cloud Scheduler|────────────▶|  Pub/Sub   |────────────▶|  Cloud Run Function   |
+       |                |  envia msg  |   Topic    |   Push      |                       |
+       +----------------+             +------------+             +-----------------------+
+```
+
+Legenda dos passos:
+
+1. Scheduler dispara um job periodicamente e publica uma mensagem no tópico Pub/Sub.
+2. O tópico Pub/Sub entrega a mensagem pela Push Subscription, que invoca a Cloud Run Function.
