@@ -25,9 +25,6 @@ def le_pubsub(cloud_event):
     except ValueError:
         print(f"Invalid payload '{payload}'. Expected '1' (start) or '0' (stop).")
         return
-
-    
-
     # Parse instance-zone pairs from INSTANCES_ZONES env var
     if not INSTANCES_ZONES:
         print("No instance-zone pairs defined. Set INSTANCES_ZONES to 'inst1:zone1,inst2:zone2,...'")
